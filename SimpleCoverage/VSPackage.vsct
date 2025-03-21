@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <Extern href="stdidcmd.h"/>
+  <Extern href="vsshlids.h"/>
+
+  <Commands package="guidSimpleCoveragePackage">
+    <Groups>
+      <Group guid="guidSimpleCoveragePackageCmdSet" id="MyMenuGroup" priority="0x0600">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS"/>
+      </Group>
+      <Group guid="guidSimpleCoveragePackageCmdSet" id="MyOtherWindowsGroup" priority="0x0100">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_VIEW_OTHER_WINDOWS"/>
+      </Group>
+    </Groups>
+
+    <Buttons>
+      <Button guid="guidSimpleCoveragePackageCmdSet" id="cmdidShowMSTestCoverageToolWindow" priority="0x0100" type="Button">
+        <Parent guid="guidSimpleCoveragePackageCmdSet" id="MyMenuGroup" />
+        <Icon guid="guidImages" id="bmpPic1" />
+        <Strings>
+          <ButtonText>MSTest Coverage</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidSimpleCoveragePackageCmdSet" id="cmdidShowMSTestCoverageOtherWindow" priority="0x0100" type="Button">
+        <Parent guid="guidSimpleCoveragePackageCmdSet" id="MyOtherWindowsGroup" />
+        <Icon guid="guidImages" id="bmpPic1" />
+        <Strings>
+          <ButtonText>MSTest Coverage</ButtonText>
+        </Strings>
+      </Button>
+    </Buttons>
+
+    <Bitmaps>
+      <Bitmap guid="guidImages" href="Resources\TestCoverage.png" usedList="bmpPic1"/>
+    </Bitmaps>
+  </Commands>
+
+  <Symbols>
+    <GuidSymbol name="guidSimpleCoveragePackage" value="{50D25A2E-A87F-45DB-A5FF-D5732063E5D9}" />
+
+    <GuidSymbol name="guidSimpleCoveragePackageCmdSet" value="{1D325698-B13C-4F9D-B177-71CAEB3425D1}">
+      <IDSymbol name="MyMenuGroup" value="0x1020" />
+      <IDSymbol name="MyOtherWindowsGroup" value="0x1021" />
+      <IDSymbol name="cmdidShowMSTestCoverageToolWindow" value="0x0100" />
+      <IDSymbol name="cmdidShowMSTestCoverageOtherWindow" value="0x0101" />
+    </GuidSymbol>
+
+    <GuidSymbol name="guidImages" value="{6A6EB6FB-93F1-49B5-9A55-B5F6D5BDBFDE}" >
+      <IDSymbol name="bmpPic1" value="1" />
+    </GuidSymbol>
+  </Symbols>
+</CommandTable> 
