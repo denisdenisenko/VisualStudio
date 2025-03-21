@@ -12,6 +12,9 @@
       <Group guid="guidSimpleCoveragePackageCmdSet" id="MyOtherWindowsGroup" priority="0x0100">
         <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_VIEW_OTHER_WINDOWS"/>
       </Group>
+      <Group guid="guidSimpleCoveragePackageCmdSet" id="MyTestMenuGroup" priority="0x0100">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TEST"/>
+      </Group>
     </Groups>
 
     <Buttons>
@@ -19,14 +22,21 @@
         <Parent guid="guidSimpleCoveragePackageCmdSet" id="MyMenuGroup" />
         <Icon guid="guidImages" id="bmpPic1" />
         <Strings>
-          <ButtonText>MSTest Coverage</ButtonText>
+          <ButtonText>Code Coverage (MSTest)</ButtonText>
         </Strings>
       </Button>
       <Button guid="guidSimpleCoveragePackageCmdSet" id="cmdidShowMSTestCoverageOtherWindow" priority="0x0100" type="Button">
         <Parent guid="guidSimpleCoveragePackageCmdSet" id="MyOtherWindowsGroup" />
         <Icon guid="guidImages" id="bmpPic1" />
         <Strings>
-          <ButtonText>MSTest Coverage</ButtonText>
+          <ButtonText>Code Coverage (MSTest)</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidSimpleCoveragePackageCmdSet" id="cmdidShowMSTestCoverageTestMenu" priority="0x0100" type="Button">
+        <Parent guid="guidSimpleCoveragePackageCmdSet" id="MyTestMenuGroup" />
+        <Icon guid="guidImages" id="bmpPic1" />
+        <Strings>
+          <ButtonText>Show Code Coverage (MSTest)</ButtonText>
         </Strings>
       </Button>
     </Buttons>
@@ -42,8 +52,10 @@
     <GuidSymbol name="guidSimpleCoveragePackageCmdSet" value="{1D325698-B13C-4F9D-B177-71CAEB3425D1}">
       <IDSymbol name="MyMenuGroup" value="0x1020" />
       <IDSymbol name="MyOtherWindowsGroup" value="0x1021" />
+      <IDSymbol name="MyTestMenuGroup" value="0x1022" />
       <IDSymbol name="cmdidShowMSTestCoverageToolWindow" value="0x0100" />
       <IDSymbol name="cmdidShowMSTestCoverageOtherWindow" value="0x0101" />
+      <IDSymbol name="cmdidShowMSTestCoverageTestMenu" value="0x0102" />
     </GuidSymbol>
 
     <GuidSymbol name="guidImages" value="{6A6EB6FB-93F1-49B5-9A55-B5F6D5BDBFDE}" >

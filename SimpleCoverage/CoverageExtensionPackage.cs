@@ -15,6 +15,7 @@ namespace SimpleCoverage
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)]
     [Guid(PackageGuidString)]
     [ProvideToolWindow(typeof(CoverageToolWindow), Style = VsDockStyle.Tabbed, Window = "3ae79031-e1bc-11d0-8f78-00a0c9110057")]
+    [ProvideToolWindow(typeof(CoverageToolWindow), Style = VsDockStyle.Tabbed, Window = "1230d898-1243-4fcf-88e1-236e1d5c675d", MultiInstances = false)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
     public sealed class CoverageExtensionPackage : AsyncPackage
     {
@@ -33,6 +34,7 @@ namespace SimpleCoverage
         /// </summary>
         private const int CommandIdToolsMenu = 0x0100;
         private const int CommandIdOtherWindowsMenu = 0x0101;
+        private const int CommandIdTestMenu = 0x0102;
 
         #region Package Members
 
@@ -66,14 +68,17 @@ namespace SimpleCoverage
             // Create command IDs
             var toolsMenuCommandID = new CommandID(new Guid(CommandSetGuidString), CommandIdToolsMenu);
             var otherWindowsMenuCommandID = new CommandID(new Guid(CommandSetGuidString), CommandIdOtherWindowsMenu);
+            var testMenuCommandID = new CommandID(new Guid(CommandSetGuidString), CommandIdTestMenu);
 
             // Create the menu commands
             var toolsMenuCommand = new MenuCommand(ShowToolWindowHandler, toolsMenuCommandID);
             var otherWindowsMenuCommand = new MenuCommand(ShowToolWindowHandler, otherWindowsMenuCommandID);
+            var testMenuCommand = new MenuCommand(ShowToolWindowHandler, testMenuCommandID);
 
             // Add commands to the service
             commandService.AddCommand(toolsMenuCommand);
             commandService.AddCommand(otherWindowsMenuCommand);
+            commandService.AddCommand(testMenuCommand);
         }
 
         /// <summary>

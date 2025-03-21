@@ -21,7 +21,7 @@ namespace SimpleCoverage
         /// </summary>
         public CoverageToolWindow() : base(null)
         {
-            Caption = "MSTest Coverage";
+            Caption = "Code Coverage (MSTest)";
             Content = control = new CoverageToolWindowControl();
         }
     }
