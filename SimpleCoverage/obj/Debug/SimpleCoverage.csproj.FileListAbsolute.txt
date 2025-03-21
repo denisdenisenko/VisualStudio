@@ -1,0 +1,4 @@
+G:\Code\VisualStudio\SimpleCoverage\obj\Debug\SimpleCoverage.csproj.AssemblyReference.cache
+G:\Code\VisualStudio\SimpleCoverage\obj\Debug\_EmptyResource.resources
+G:\Code\VisualStudio\SimpleCoverage\obj\Debug\SimpleCoverage.csproj.GenerateResource.cache
+G:\Code\VisualStudio\SimpleCoverage\obj\Debug\SimpleCoverage.csproj.CoreCompileInputs.cache

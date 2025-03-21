@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <Extern href="stdidcmd.h"/>
+  <Extern href="vsshlids.h"/>
+  
+  <Commands package="guidDD_CoveragePackage">
+    <Groups>
+      <Group guid="guidDD_CoveragePackageCmdSet" id="MyMenuGroup" priority="0x0600">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS"/>
+      </Group>
+    </Groups>
+    
+    <Buttons>
+      <Button guid="guidDD_CoveragePackageCmdSet" id="cmdidShowCoverage" priority="0x0100" type="Button">
+        <Parent guid="guidDD_CoveragePackageCmdSet" id="MyMenuGroup" />
+        <Strings>
+          <ButtonText>Show Test Coverage</ButtonText>
+          <CommandName>ShowTestCoverage</CommandName>
+        </Strings>
+      </Button>
+      
+      <Button guid="guidDD_CoveragePackageCmdSet" id="cmdidShowToolWindow" priority="0x0100" type="Button">
+        <Parent guid="guidSHLMainMenu" id="IDG_VS_WNDO_OTRWNDWS1"/>
+        <Strings>
+          <ButtonText>Test Coverage</ButtonText>
+        </Strings>
+      </Button>
+    </Buttons>
+  </Commands>
+  
+  <Symbols>
+    <GuidSymbol name="guidDD_CoveragePackage" value="{07164fef-2624-4882-a468-49f2eb356c67}" />
+    <GuidSymbol name="guidDD_CoveragePackageCmdSet" value="{07164fef-2624-4882-a468-49f2eb356c68}">
+      <IDSymbol name="MyMenuGroup" value="0x1020" />
+      <IDSymbol name="cmdidShowCoverage" value="0x0100" />
+      <IDSymbol name="cmdidShowToolWindow" value="0x0101" />
+    </GuidSymbol>
+  </Symbols>
+</CommandTable> 
