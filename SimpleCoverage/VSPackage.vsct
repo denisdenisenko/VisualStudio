@@ -3,6 +3,9 @@
 
   <Extern href="stdidcmd.h"/>
   <Extern href="vsshlids.h"/>
+  <Extern href="vsshlids.h"/>
+  <Extern href="VsDbgCmd.h" />
+  <Extern href="stdidcmd.h" />
 
   <Commands package="guidSimpleCoveragePackage">
     <Groups>
@@ -20,30 +23,26 @@
     <Buttons>
       <Button guid="guidSimpleCoveragePackageCmdSet" id="cmdidShowMSTestCoverageToolWindow" priority="0x0100" type="Button">
         <Parent guid="guidSimpleCoveragePackageCmdSet" id="MyMenuGroup" />
-        <Icon guid="guidImages" id="bmpPic1" />
+        <Icon guid="guidVsShellIcons" id="CheckboxChecked" />
         <Strings>
           <ButtonText>Code Coverage (MSTest)</ButtonText>
         </Strings>
       </Button>
       <Button guid="guidSimpleCoveragePackageCmdSet" id="cmdidShowMSTestCoverageOtherWindow" priority="0x0100" type="Button">
         <Parent guid="guidSimpleCoveragePackageCmdSet" id="MyOtherWindowsGroup" />
-        <Icon guid="guidImages" id="bmpPic1" />
+        <Icon guid="guidVsShellIcons" id="CheckboxChecked" />
         <Strings>
           <ButtonText>Code Coverage (MSTest)</ButtonText>
         </Strings>
       </Button>
       <Button guid="guidSimpleCoveragePackageCmdSet" id="cmdidShowMSTestCoverageTestMenu" priority="0x0100" type="Button">
         <Parent guid="guidSimpleCoveragePackageCmdSet" id="MyTestMenuGroup" />
-        <Icon guid="guidImages" id="bmpPic1" />
+        <Icon guid="guidVsShellIcons" id="CheckboxChecked" />
         <Strings>
           <ButtonText>Show Code Coverage (MSTest)</ButtonText>
         </Strings>
       </Button>
     </Buttons>
-
-    <Bitmaps>
-      <Bitmap guid="guidImages" href="Resources\TestCoverage.png" usedList="bmpPic1"/>
-    </Bitmaps>
   </Commands>
 
   <Symbols>
@@ -56,10 +55,6 @@
       <IDSymbol name="cmdidShowMSTestCoverageToolWindow" value="0x0100" />
       <IDSymbol name="cmdidShowMSTestCoverageOtherWindow" value="0x0101" />
       <IDSymbol name="cmdidShowMSTestCoverageTestMenu" value="0x0102" />
-    </GuidSymbol>
-
-    <GuidSymbol name="guidImages" value="{6A6EB6FB-93F1-49B5-9A55-B5F6D5BDBFDE}" >
-      <IDSymbol name="bmpPic1" value="1" />
     </GuidSymbol>
   </Symbols>
 </CommandTable> 

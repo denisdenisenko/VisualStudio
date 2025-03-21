@@ -68,12 +68,6 @@
     </VSCTCompile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\TestCoverage.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
