@@ -5,51 +5,64 @@
   <Extern href="vsshlids.h"/>
   <Extern href="VsDbgCmd.h" />
 
-  <Commands package="guidSimpleCoveragePackage">
+  <Commands package="guidCoverageExtensionPackage">
     <Groups>
-      <Group guid="guidSimpleCoveragePackageCmdSet" id="MyMenuGroup" priority="0x0600">
+      <Group guid="guidCoverageExtensionPackageCmdSet" id="MyMenuGroup" priority="0x0600">
         <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS"/>
       </Group>
-      <Group guid="guidSimpleCoveragePackageCmdSet" id="MyOtherWindowsGroup" priority="0x0100">
+      <Group guid="guidCoverageExtensionPackageCmdSet" id="MyOtherWindowsGroup" priority="0x0100">
         <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_WINDOW"/>
       </Group>
-      <Group guid="guidSimpleCoveragePackageCmdSet" id="MyTestMenuGroup" priority="0x0100">
-        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS"/>
+      <Group guid="guidCoverageExtensionPackageCmdSet" id="MyTestMenuGroup" priority="0x0100">
+        <Parent guid="guidVsDebugGroup" id="IDM_TEST_TOOLBAR_MENU"/>
       </Group>
     </Groups>
 
     <Buttons>
-      <Button guid="guidSimpleCoveragePackageCmdSet" id="cmdidShowMSTestCoverageToolWindow" priority="0x0100" type="Button">
-        <Parent guid="guidSimpleCoveragePackageCmdSet" id="MyMenuGroup" />
+      <Button guid="guidCoverageExtensionPackageCmdSet" id="cmdidShowMSTestCoverageToolWindow" priority="0x0100" type="Button">
+        <Parent guid="guidCoverageExtensionPackageCmdSet" id="MyMenuGroup" />
+        <Icon guid="guidImages" id="bmpFeatureCodeCoverage" />
         <Strings>
           <ButtonText>Code Coverage (MSTest)</ButtonText>
         </Strings>
       </Button>
-      <Button guid="guidSimpleCoveragePackageCmdSet" id="cmdidShowMSTestCoverageOtherWindow" priority="0x0100" type="Button">
-        <Parent guid="guidSimpleCoveragePackageCmdSet" id="MyOtherWindowsGroup" />
+      <Button guid="guidCoverageExtensionPackageCmdSet" id="cmdidShowMSTestCoverageOtherWindow" priority="0x0100" type="Button">
+        <Parent guid="guidCoverageExtensionPackageCmdSet" id="MyOtherWindowsGroup" />
+        <Icon guid="guidImages" id="bmpFeatureCodeCoverage" />
         <Strings>
           <ButtonText>Code Coverage (MSTest)</ButtonText>
         </Strings>
       </Button>
-      <Button guid="guidSimpleCoveragePackageCmdSet" id="cmdidShowMSTestCoverageTestMenu" priority="0x0100" type="Button">
-        <Parent guid="guidSimpleCoveragePackageCmdSet" id="MyTestMenuGroup" />
+      <Button guid="guidCoverageExtensionPackageCmdSet" id="cmdidShowMSTestCoverageTestMenu" priority="0x0100" type="Button">
+        <Parent guid="guidCoverageExtensionPackageCmdSet" id="MyTestMenuGroup" />
+        <Icon guid="guidImages" id="bmpFeatureCodeCoverage" />
         <Strings>
-          <ButtonText>Show Code Coverage (MSTest)</ButtonText>
+          <ButtonText>View Code Coverage</ButtonText>
         </Strings>
       </Button>
     </Buttons>
   </Commands>
 
   <Symbols>
-    <GuidSymbol name="guidSimpleCoveragePackage" value="{50D25A2E-A87F-45DB-A5FF-D5732063E5D9}" />
+    <GuidSymbol name="guidCoverageExtensionPackage" value="{d9a9e2fd-77f3-439a-8a02-9bd33b5285ed}" />
 
-    <GuidSymbol name="guidSimpleCoveragePackageCmdSet" value="{1D325698-B13C-4F9D-B177-71CAEB3425D1}">
-      <IDSymbol name="MyMenuGroup" value="0x1020" />
-      <IDSymbol name="MyOtherWindowsGroup" value="0x1021" />
-      <IDSymbol name="MyTestMenuGroup" value="0x1022" />
+    <GuidSymbol name="guidCoverageExtensionPackageCmdSet" value="{3fe6f668-4369-4be8-bb54-8ec7e97afd0c}">
       <IDSymbol name="cmdidShowMSTestCoverageToolWindow" value="0x0100" />
       <IDSymbol name="cmdidShowMSTestCoverageOtherWindow" value="0x0101" />
       <IDSymbol name="cmdidShowMSTestCoverageTestMenu" value="0x0102" />
     </GuidSymbol>
+
+    <GuidSymbol name="guidImages" value="{1b13339b-7400-4854-b5e5-5dd3e62f45a7}">
+      <IDSymbol name="bmpFeatureCodeCoverage" value="1" />
+      <IDSymbol name="bmpPic2" value="2" />
+      <IDSymbol name="bmpPicSearch" value="3" />
+      <IDSymbol name="bmpPicX" value="4" />
+      <IDSymbol name="bmpPicArrows" value="5" />
+      <IDSymbol name="bmpPicStrikethrough" value="6" />
+    </GuidSymbol>
   </Symbols>
+
+  <Bitmaps>
+    <Bitmap guid="guidImages" href="Resources\CodeCoverageIcon.png" usedList="bmpFeatureCodeCoverage, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
+  </Bitmaps>
 </CommandTable> 

@@ -595,5 +595,21 @@ namespace SimpleCoverage
                 }
             });
         }
+
+        /// <summary>
+        /// Public method to refresh coverage data
+        /// </summary>
+        public void RefreshCoverage()
+        {
+            LoadCoverageData();
+
+            // Enable highlighting by default when refreshing from external source
+            if (!isHighlightingEnabled)
+            {
+                isHighlightingEnabled = true;
+                adornmentManager.ActivateCoverage();
+                showHideButton.Content = "Hide Highlighting";
+            }
+        }
     }
 }

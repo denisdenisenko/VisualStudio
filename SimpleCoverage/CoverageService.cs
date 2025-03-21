@@ -3,25 +3,85 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Xml;
 using System.Xml.Linq;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using EnvDTE;
 using EnvDTE80;
+using Microsoft.VisualStudio.Text.Editor;
 
 namespace SimpleCoverage
 {
     /// <summary>
-    /// Information about a source file's coverage
+    /// Coverage status of a line of code
+    /// </summary>
+    public enum LineCoverageStatus
+    {
+        /// <summary>
+        /// Line is not covered by any tests
+        /// </summary>
+        NotCovered,
+
+        /// <summary>
+        /// Line is partially covered by tests
+        /// </summary>
+        PartiallyCovered,
+
+        /// <summary>
+        /// Line is fully covered by tests
+        /// </summary>
+        Covered
+    }
+
+    /// <summary>
+    /// Information about code coverage for a file
     /// </summary>
     public class FileCoverageInfo
     {
+        /// <summary>
+        /// Gets or sets the file path
+        /// </summary>
         public string FilePath { get; set; }
-        public Dictionary<int, bool> LinesCovered { get; set; } = new Dictionary<int, bool>();
-        public double CoveragePercentage { get; set; }
-        public int TotalLines { get; set; }
+
+        /// <summary>
+        /// Gets or sets the number of covered lines
+        /// </summary>
         public int CoveredLines { get; set; }
+
+        /// <summary>
+        /// Gets or sets the number of coverable lines
+        /// </summary>
+        public int CoverableLines { get; set; }
+
+        /// <summary>
+        /// Gets the coverage percentage
+        /// </summary>
+        public double CoveragePercentage
+        {
+            get
+            {
+                if (CoverableLines == 0)
+                    return 0;
+
+                return (double)CoveredLines / CoverableLines * 100;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets line coverage information (line number to coverage status)
+        /// </summary>
+        public Dictionary<int, LineCoverageStatus> LineCoverage { get; set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileCoverageInfo"/> class
+        /// </summary>
+        public FileCoverageInfo()
+        {
+            LineCoverage = new Dictionary<int, LineCoverageStatus>();
+        }
     }
 
     /// <summary>
@@ -31,6 +91,24 @@ namespace SimpleCoverage
     {
         private Dictionary<string, FileCoverageInfo> fileCoverageData = new Dictionary<string, FileCoverageInfo>();
         private string currentCoverageFilePath;
+        private const string CoberturaFormat = "Cobertura";
+        private const string OpenCoverFormat = "OpenCover";
+        private const string VisualStudioFormat = "VisualStudio";
+
+        /// <summary>
+        /// Gets the coverage file path
+        /// </summary>
+        public string CoverageFilePath => currentCoverageFilePath;
+
+        /// <summary>
+        /// Gets the coverage data
+        /// </summary>
+        public Dictionary<string, FileCoverageInfo> FileCoverageData => fileCoverageData;
+
+        /// <summary>
+        /// Event that fires when coverage data is updated
+        /// </summary>
+        public event EventHandler CoverageDataUpdated;
 
         /// <summary>
         /// Gets code coverage data asynchronously
@@ -462,6 +540,345 @@ namespace SimpleCoverage
             {
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Loads coverage data from files in the solution directory
+        /// </summary>
+        /// <returns>Dictionary of file paths to coverage information</returns>
+        public async Task<Dictionary<string, FileCoverageInfo>> LoadCoverageDataAsync()
+        {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
+            var result = new Dictionary<string, FileCoverageInfo>(StringComparer.OrdinalIgnoreCase);
+
+            try
+            {
+                // Get the solution directory
+                var dte = Package.GetGlobalService(typeof(EnvDTE.DTE)) as EnvDTE.DTE;
+                if (dte == null || dte.Solution == null || string.IsNullOrEmpty(dte.Solution.FullName))
+                    return result;
+
+                string solutionDir = Path.GetDirectoryName(dte.Solution.FullName);
+
+                // Find all coverage files
+                var coverageFiles = FindCoverageFiles(solutionDir);
+
+                if (coverageFiles.Length == 0)
+                    return result;
+
+                // Get the most recent file (typically what we want)
+                string mostRecentFile = coverageFiles.OrderByDescending(f => File.GetLastWriteTime(f)).First();
+                string format = DetermineCoverageFormat(mostRecentFile);
+
+                // Parse coverage file
+                Dictionary<string, FileCoverageInfo> coverageData = null;
+
+                if (format == CoberturaFormat)
+                    coverageData = ParseCoberturaFile(mostRecentFile);
+                else if (format == OpenCoverFormat)
+                    coverageData = ParseOpenCoverFile(mostRecentFile);
+                else if (format == VisualStudioFormat)
+                    coverageData = ParseVisualStudioCoverageFile(mostRecentFile);
+
+                if (coverageData != null)
+                {
+                    foreach (var item in coverageData)
+                    {
+                        // Normalize paths
+                        string normalizedPath = item.Key.Replace("/", "\\").ToLowerInvariant();
+
+                        // Only include source files of the current solution
+                        if (normalizedPath.StartsWith(solutionDir.ToLowerInvariant()) &&
+                            File.Exists(normalizedPath))
+                        {
+                            result[normalizedPath] = item.Value;
+                        }
+                    }
+                }
+
+                // Update internal state
+                fileCoverageData = result;
+                currentCoverageFilePath = mostRecentFile;
+
+                // Notify listeners
+                CoverageDataUpdated?.Invoke(this, EventArgs.Empty);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error loading coverage data: {ex.Message}");
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Finds coverage files in the solution directory
+        /// </summary>
+        private string[] FindCoverageFiles(string baseDirectory)
+        {
+            if (string.IsNullOrEmpty(baseDirectory) || !Directory.Exists(baseDirectory))
+                return Array.Empty<string>();
+
+            // Look for coverage files in standard locations
+            var coveragePatterns = new[] {
+                "**/coverage.cobertura.xml",
+                "**/coverage.opencover.xml",
+                "**/TestResults/**/*.coverage",
+                "**/TestResults/**/*.cobertura.xml",
+                "**/TestResults/**/*.opencover.xml"
+            };
+
+            var result = coveragePatterns
+                .SelectMany(pattern => Directory.GetFiles(baseDirectory, Path.GetFileName(pattern), SearchOption.AllDirectories))
+                .Where(file => File.Exists(file))
+                .OrderByDescending(File.GetLastWriteTime)
+                .ToArray();
+
+            return result;
+        }
+
+        /// <summary>
+        /// Determines the format of a coverage file
+        /// </summary>
+        private string DetermineCoverageFormat(string filePath)
+        {
+            try
+            {
+                if (filePath.EndsWith(".coverage", StringComparison.OrdinalIgnoreCase))
+                    return VisualStudioFormat;
+
+                using (var reader = new StreamReader(filePath))
+                {
+                    // Read the first few lines to determine format
+                    string header = reader.ReadLine();
+
+                    if (header != null)
+                    {
+                        if (header.Contains("<coverage") && header.Contains("clover.dtd"))
+                            return CoberturaFormat;
+
+                        if (header.Contains("<CoverageSession"))
+                            return OpenCoverFormat;
+                    }
+                }
+
+                // Try to parse XML to determine format
+                XDocument doc = XDocument.Load(filePath);
+                XElement root = doc.Root;
+
+                if (root != null)
+                {
+                    if (root.Name == "coverage")
+                        return CoberturaFormat;
+
+                    if (root.Name == "CoverageSession")
+                        return OpenCoverFormat;
+                }
+            }
+            catch
+            {
+                // Ignore parsing errors
+            }
+
+            // Default to Cobertura as it's most common
+            return CoberturaFormat;
+        }
+
+        /// <summary>
+        /// Parses a Cobertura XML file
+        /// </summary>
+        private Dictionary<string, FileCoverageInfo> ParseCoberturaFile(string filePath)
+        {
+            var result = new Dictionary<string, FileCoverageInfo>(StringComparer.OrdinalIgnoreCase);
+
+            try
+            {
+                XDocument doc = XDocument.Load(filePath);
+
+                // Get all classes (files)
+                var classElements = doc.Descendants("class");
+
+                foreach (var classElement in classElements)
+                {
+                    string filename = classElement.Attribute("filename")?.Value;
+
+                    if (string.IsNullOrEmpty(filename))
+                        continue;
+
+                    // Create file coverage info
+                    var fileCoverage = new FileCoverageInfo
+                    {
+                        FilePath = filename
+                    };
+
+                    // Get all lines
+                    var lineElements = classElement.Descendants("line");
+
+                    foreach (var lineElement in lineElements)
+                    {
+                        // Get line info
+                        int lineNumber;
+                        if (!int.TryParse(lineElement.Attribute("number")?.Value, out lineNumber))
+                            continue;
+
+                        int hits;
+                        if (!int.TryParse(lineElement.Attribute("hits")?.Value, out hits))
+                            continue;
+
+                        // Set coverage status
+                        LineCoverageStatus status = hits > 0
+                            ? LineCoverageStatus.Covered
+                            : LineCoverageStatus.NotCovered;
+
+                        // Check for branch coverage
+                        bool hasBranch = false;
+                        int coveredBranches = 0;
+
+                        if (lineElement.Attribute("branch")?.Value == "true")
+                        {
+                            hasBranch = true;
+
+                            // Parse branch coverage
+                            int.TryParse(lineElement.Attribute("condition-coverage")?.Value?.Split('(')[1]?.Split('/')[0], out coveredBranches);
+                            int.TryParse(lineElement.Attribute("condition-coverage")?.Value?.Split('/')[1]?.Split(')')[0], out int totalBranches);
+
+                            if (totalBranches > 0 && coveredBranches < totalBranches && coveredBranches > 0)
+                                status = LineCoverageStatus.PartiallyCovered;
+                        }
+
+                        // Add to line coverage
+                        fileCoverage.LineCoverage[lineNumber] = status;
+
+                        // Update counters
+                        fileCoverage.CoverableLines++;
+
+                        if (status == LineCoverageStatus.Covered || status == LineCoverageStatus.PartiallyCovered)
+                            fileCoverage.CoveredLines++;
+                    }
+
+                    // Add to result
+                    if (fileCoverage.CoverableLines > 0)
+                        result[filename] = fileCoverage;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error parsing Cobertura file: {ex.Message}");
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Parses an OpenCover XML file
+        /// </summary>
+        private Dictionary<string, FileCoverageInfo> ParseOpenCoverFile(string filePath)
+        {
+            var result = new Dictionary<string, FileCoverageInfo>(StringComparer.OrdinalIgnoreCase);
+
+            try
+            {
+                XDocument doc = XDocument.Load(filePath);
+
+                // Get all modules
+                var moduleElements = doc.Descendants("Module");
+
+                foreach (var moduleElement in moduleElements)
+                {
+                    // Get all files
+                    var fileElements = moduleElement.Descendants("File");
+                    var files = new Dictionary<int, string>();
+
+                    foreach (var fileElement in fileElements)
+                    {
+                        int fileId;
+                        if (!int.TryParse(fileElement.Attribute("uid")?.Value, out fileId))
+                            continue;
+
+                        string fullPath = fileElement.Attribute("fullPath")?.Value;
+                        if (string.IsNullOrEmpty(fullPath))
+                            continue;
+
+                        files[fileId] = fullPath;
+                    }
+
+                    // Get all methods
+                    var methodElements = moduleElement.Descendants("Method");
+
+                    foreach (var methodElement in methodElements)
+                    {
+                        // Get sequences
+                        var sequencePoints = methodElement.Descendants("SequencePoint");
+
+                        foreach (var sequencePoint in sequencePoints)
+                        {
+                            int fileId;
+                            if (!int.TryParse(sequencePoint.Attribute("fileid")?.Value, out fileId))
+                                continue;
+
+                            string fullPath;
+                            if (!files.TryGetValue(fileId, out fullPath))
+                                continue;
+
+                            // Create file coverage info if needed
+                            if (!result.TryGetValue(fullPath, out var fileCoverage))
+                            {
+                                fileCoverage = new FileCoverageInfo
+                                {
+                                    FilePath = fullPath
+                                };
+                                result[fullPath] = fileCoverage;
+                            }
+
+                            // Get line info
+                            int lineNumber;
+                            if (!int.TryParse(sequencePoint.Attribute("sl")?.Value, out lineNumber))
+                                continue;
+
+                            int visitCount;
+                            if (!int.TryParse(sequencePoint.Attribute("vc")?.Value, out visitCount))
+                                continue;
+
+                            // Set coverage status
+                            LineCoverageStatus status = visitCount > 0
+                                ? LineCoverageStatus.Covered
+                                : LineCoverageStatus.NotCovered;
+
+                            // Check for branch coverage
+                            if (int.TryParse(sequencePoint.Attribute("offsetchain")?.Value, out int offsetChain) && offsetChain > 0)
+                            {
+                                status = LineCoverageStatus.PartiallyCovered;
+                            }
+
+                            // Add to line coverage
+                            fileCoverage.LineCoverage[lineNumber] = status;
+
+                            // Update counters
+                            fileCoverage.CoverableLines++;
+
+                            if (status == LineCoverageStatus.Covered || status == LineCoverageStatus.PartiallyCovered)
+                                fileCoverage.CoveredLines++;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error parsing OpenCover file: {ex.Message}");
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Parses a Visual Studio coverage file (.coverage)
+        /// </summary>
+        private Dictionary<string, FileCoverageInfo> ParseVisualStudioCoverageFile(string filePath)
+        {
+            // Visual Studio coverage files require specialized libraries to read
+            // For now, we'll return an empty result
+            return new Dictionary<string, FileCoverageInfo>();
         }
     }
 }

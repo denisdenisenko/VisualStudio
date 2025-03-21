@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
+<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema/design/2011">
   <Metadata>
-    <Identity Id="SimpleCoverage.50D25A2E-A87F-45DB-A5FF-D5732063E5D9" Version="1.0" Language="en-US" Publisher="Your Name" />
-    <DisplayName>Simple Code Coverage Analyzer</DisplayName>
-    <Description>A lightweight Code Coverage Analyzer for Visual Studio that shows MSTest coverage results</Description>
-    <Tags>code coverage;unit test;mstest</Tags>
+    <Identity Id="SimpleCoverage.d9a9e2fd-77f3-439a-8a02-9bd33b5285ed" Version="1.0" Language="en-US" Publisher="YourName" />
+    <DisplayName>MSTest Code Coverage Viewer</DisplayName>
+    <Description xml:space="preserve">Visualizes code coverage from MSTest and other test frameworks in Visual Studio. Automatically updates when tests are run and highlights code coverage directly in the editor.</Description>
+    <MoreInfo>https://github.com/yourusername/MSTestCoverageViewer</MoreInfo>
+    <Tags>code coverage, mstest, testing, test, coverage</Tags>
   </Metadata>
   <Installation>
     <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[17.0, 18.0)">
+      <ProductArchitecture>amd64</ProductArchitecture>
+    </InstallationTarget>
+    <InstallationTarget Version="[17.0,18.0)" Id="Microsoft.VisualStudio.Pro">
+      <ProductArchitecture>amd64</ProductArchitecture>
+    </InstallationTarget>
+    <InstallationTarget Version="[17.0,18.0)" Id="Microsoft.VisualStudio.Enterprise">
       <ProductArchitecture>amd64</ProductArchitecture>
     </InstallationTarget>
   </Installation>
@@ -19,5 +26,6 @@
   </Prerequisites>
   <Assets>
     <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
+    <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%|" />
   </Assets>
 </PackageManifest> 
