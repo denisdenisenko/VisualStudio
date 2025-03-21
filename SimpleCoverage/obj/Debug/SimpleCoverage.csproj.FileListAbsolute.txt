@@ -2,3 +2,15 @@ G:\Code\VisualStudio\SimpleCoverage\obj\Debug\SimpleCoverage.csproj.AssemblyRefe
 G:\Code\VisualStudio\SimpleCoverage\obj\Debug\_EmptyResource.resources
 G:\Code\VisualStudio\SimpleCoverage\obj\Debug\SimpleCoverage.csproj.GenerateResource.cache
 G:\Code\VisualStudio\SimpleCoverage\obj\Debug\SimpleCoverage.csproj.CoreCompileInputs.cache
+G:\Code\VisualStudio\SimpleCoverage\bin\Debug\SimpleCoverage.dll
+G:\Code\VisualStudio\SimpleCoverage\bin\Debug\SimpleCoverage.pdb
+G:\Code\VisualStudio\SimpleCoverage\bin\Debug\SimpleCoverage.pkgdef
+G:\Code\VisualStudio\SimpleCoverage\bin\Debug\SimpleCoverage.vsix
+G:\Code\VisualStudio\SimpleCoverage\bin\Debug\extension.vsixmanifest
+G:\Code\VisualStudio\SimpleCoverage\obj\Debug\SimpleCoverage.dll
+G:\Code\VisualStudio\SimpleCoverage\obj\Debug\SimpleCoverage.pdb
+G:\Code\VisualStudio\SimpleCoverage\obj\Debug\SimpleCoverage.pkgdef
+G:\Code\VisualStudio\SimpleCoverage\obj\Debug\SimpleCoverage.latest.pkgdef
+G:\Code\VisualStudio\SimpleCoverage\obj\Debug\extension.vsixmanifest
+G:\Code\VisualStudio\SimpleCoverage\obj\Debug\files.json
+G:\Code\VisualStudio\SimpleCoverage\obj\Debug\createTemplateManifests.cache
