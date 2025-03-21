@@ -5,6 +5,7 @@ using System.Threading;
 using Task = System.Threading.Tasks.Task;
 using System.ComponentModel.Design;
 using Microsoft.VisualStudio.Shell.Interop;
+using SimpleCoverage.CoverageAdornment;
 
 namespace SimpleCoverage
 {
@@ -17,6 +18,8 @@ namespace SimpleCoverage
     [ProvideToolWindow(typeof(CoverageToolWindow), Style = VsDockStyle.Tabbed, Window = "3ae79031-e1bc-11d0-8f78-00a0c9110057")]
     [ProvideToolWindow(typeof(CoverageToolWindow), Style = VsDockStyle.Tabbed, Window = "1230d898-1243-4fcf-88e1-236e1d5c675d", MultiInstances = false)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
+    [ProvideService(typeof(CoverageAdornmentManager), IsAsyncQueryable = true)]
+    [ProvideAutoLoad(UIContextGuids80.SolutionExists, PackageAutoLoadFlags.BackgroundLoad)]
     public sealed class CoverageExtensionPackage : AsyncPackage
     {
         /// <summary>
@@ -36,6 +39,9 @@ namespace SimpleCoverage
         private const int CommandIdOtherWindowsMenu = 0x0101;
         private const int CommandIdTestMenu = 0x0102;
 
+        // Coverage adornment manager instance
+        private CoverageAdornmentManager adornmentManager;
+
         #region Package Members
 
         /// <summary>
@@ -47,8 +53,23 @@ namespace SimpleCoverage
             // Switch to the UI thread
             await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 
+            // Initialize the adornment manager
+            adornmentManager = new CoverageAdornmentManager();
+
+            // Add service provider
+            await this.AddServiceAsync(typeof(CoverageAdornmentManager), CreateAdornmentManagerServiceAsync, true);
+
             // Register the menu commands
             await RegisterCommandsAsync();
+        }
+
+        /// <summary>
+        /// Creates the adornment manager service
+        /// </summary>
+        private async Task<object> CreateAdornmentManagerServiceAsync(IAsyncServiceContainer container, CancellationToken cancellationToken, Type serviceType)
+        {
+            await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
+            return adornmentManager;
         }
 
         /// <summary>

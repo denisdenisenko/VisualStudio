@@ -43,19 +43,24 @@
               "include": "Compile, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "target": "Package",
               "version": "[17.0.31902.203, )"
+            },
+            "Microsoft.VisualStudio.Text.Data": {
+              "target": "Package",
+              "version": "[17.0.487, )"
+            },
+            "Microsoft.VisualStudio.Text.Logic": {
+              "target": "Package",
+              "version": "[17.0.487, )"
+            },
+            "Microsoft.VisualStudio.Text.UI": {
+              "target": "Package",
+              "version": "[17.0.487, )"
+            },
+            "Microsoft.VisualStudio.Text.UI.Wpf": {
+              "target": "Package",
+              "version": "[17.0.487, )"
             }
           }
-        }
-      },
-      "runtimes": {
-        "win": {
-          "#import": []
-        },
-        "win-x64": {
-          "#import": []
-        },
-        "win-x86": {
-          "#import": []
         }
       }
     }

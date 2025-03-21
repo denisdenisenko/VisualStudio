@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "B3a0p+7L2zNs94z7hXJ3oChsgeainawwiDhiW2sevn+EYwEQRs18/1FTlv+kFYkcZbWmUzDA+E9NEr+4/gQsrA==",
+  "dgSpecHash": "4fs7zvPul/gEJi+pXv4onVU0pYkvVY7AwMwAXlDjqXIHC871qTH5ESnFyM8pvMRZTXu68i0KJ81kWcNzlPo8ZA==",
   "success": true,
   "projectFilePath": "G:\\Code\\VisualStudio\\SimpleCoverage\\SimpleCoverage.csproj",
   "expectedPackageFiles": [
@@ -91,9 +91,6 @@
     "C:\\Users\\Denis\\.nuget\\packages\\microsoft.win32.registry\\5.0.0\\microsoft.win32.registry.5.0.0.nupkg.sha512",
     "C:\\Users\\Denis\\.nuget\\packages\\nerdbank.streams\\2.6.81\\nerdbank.streams.2.6.81.nupkg.sha512",
     "C:\\Users\\Denis\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
-    "C:\\Users\\Denis\\.nuget\\packages\\runtime.any.system.io\\4.3.0\\runtime.any.system.io.4.3.0.nupkg.sha512",
-    "C:\\Users\\Denis\\.nuget\\packages\\runtime.any.system.runtime\\4.3.0\\runtime.any.system.runtime.4.3.0.nupkg.sha512",
-    "C:\\Users\\Denis\\.nuget\\packages\\runtime.win.microsoft.win32.primitives\\4.3.0\\runtime.win.microsoft.win32.primitives.4.3.0.nupkg.sha512",
     "C:\\Users\\Denis\\.nuget\\packages\\stdole\\17.0.31902.203\\stdole.17.0.31902.203.nupkg.sha512",
     "C:\\Users\\Denis\\.nuget\\packages\\streamjsonrpc\\2.8.28\\streamjsonrpc.2.8.28.nupkg.sha512",
     "C:\\Users\\Denis\\.nuget\\packages\\system.buffers\\4.5.1\\system.buffers.4.5.1.nupkg.sha512",
