@@ -3,8 +3,10 @@ using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
+using System.Windows;
 
 namespace SimpleCoverage.CoverageAdornment
 {
@@ -15,7 +17,7 @@ namespace SimpleCoverage.CoverageAdornment
     internal sealed class CoverageAdornmentManager
     {
         private readonly CoverageService coverageService;
-        private readonly ConcurrentDictionary<ITextView, bool> registeredViews;
+        private readonly ConcurrentDictionary<IWpfTextView, bool> registeredViews;
         private bool isCoverageActive;
 
         /// <summary>
@@ -25,14 +27,14 @@ namespace SimpleCoverage.CoverageAdornment
         public CoverageAdornmentManager()
         {
             coverageService = new CoverageService();
-            registeredViews = new ConcurrentDictionary<ITextView, bool>();
+            registeredViews = new ConcurrentDictionary<IWpfTextView, bool>();
             isCoverageActive = false;
         }
 
         /// <summary>
         /// Registers a text view with the manager
         /// </summary>
-        public void RegisterTextView(ITextView textView)
+        public void RegisterTextView(IWpfTextView textView)
         {
             registeredViews[textView] = true;
             textView.Closed += TextView_Closed;
@@ -43,7 +45,7 @@ namespace SimpleCoverage.CoverageAdornment
         /// </summary>
         private void TextView_Closed(object sender, EventArgs e)
         {
-            var textView = sender as ITextView;
+            var textView = sender as IWpfTextView;
             if (textView != null)
             {
                 textView.Closed -= TextView_Closed;
@@ -94,7 +96,7 @@ namespace SimpleCoverage.CoverageAdornment
         /// <summary>
         /// Refreshes a single view
         /// </summary>
-        public void RefreshView(ITextView textView)
+        public void RefreshView(IWpfTextView textView)
         {
             ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
             {

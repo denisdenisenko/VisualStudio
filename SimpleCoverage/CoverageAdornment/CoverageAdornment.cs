@@ -1,10 +1,12 @@
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Formatting;
+using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Utilities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -40,7 +42,7 @@ namespace SimpleCoverage.CoverageAdornment
         private readonly IWpfTextView textView;
         private readonly IAdornmentLayer adornmentLayer;
         private readonly CoverageAdornmentManager adornmentManager;
-        private readonly Dictionary<int, UIElement> elements;
+        private readonly Dictionary<int, System.Windows.UIElement> elements;
         private readonly string filePath;
         private FileCoverageInfo fileCoverage;
 
@@ -51,16 +53,10 @@ namespace SimpleCoverage.CoverageAdornment
         {
             this.textView = textView;
             this.adornmentManager = adornmentManager;
-            this.elements = new Dictionary<int, UIElement>();
+            this.elements = new Dictionary<int, System.Windows.UIElement>();
 
-            // Create adornment layer
-            adornmentLayer = textView.GetAdornmentLayer("CoverageHighlightAdornmentLayer");
-
-            // If the layer doesn't exist, create it
-            if (adornmentLayer == null)
-            {
-                adornmentLayer = textView.GetOrCreateAdornmentLayer("CoverageHighlightAdornmentLayer");
-            }
+            // Use the Text adornment layer (predefined)
+            adornmentLayer = textView.GetAdornmentLayer(PredefinedAdornmentLayers.Text);
 
             // Get current file path
             ITextDocument document;
@@ -180,7 +176,7 @@ namespace SimpleCoverage.CoverageAdornment
 
             // Get highlight color
             var color = GetHighlightColor(status);
-            if (color.A == 0) // Transparent - no need to highlight
+            if (color == Brushes.Transparent) // Check if brush is transparent
                 return;
 
             // Create the visual element for the line

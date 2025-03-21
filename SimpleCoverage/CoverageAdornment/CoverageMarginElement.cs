@@ -19,7 +19,7 @@ namespace SimpleCoverage.CoverageAdornment
 
         private readonly IWpfTextView textView;
         private readonly CoverageAdornmentManager adornmentManager;
-        private readonly Dictionary<int, UIElement> elements;
+        private readonly Dictionary<int, System.Windows.UIElement> elements;
         private readonly string filePath;
         private bool isDisposed;
         private FileCoverageInfo fileCoverage;
@@ -31,7 +31,7 @@ namespace SimpleCoverage.CoverageAdornment
         {
             this.textView = textView;
             this.adornmentManager = adornmentManager;
-            this.elements = new Dictionary<int, UIElement>();
+            this.elements = new Dictionary<int, System.Windows.UIElement>();
 
             // Get current file path
             ITextDocument document;

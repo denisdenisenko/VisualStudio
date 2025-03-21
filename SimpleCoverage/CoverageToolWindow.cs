@@ -217,9 +217,14 @@ namespace SimpleCoverage
                     {
                         Header = "Run tests with: dotnet test --filter \"FullyQualifiedName~MSTest\" --collect:\"XPlat Code Coverage\""
                     };
+                    var menuItem = new TreeViewItem
+                    {
+                        Header = "Access via: Tools > Code Coverage (MSTest), Window > Code Coverage (MSTest), or Tools > Show Code Coverage (MSTest)"
+                    };
 
                     coverageTreeView.Items.Add(infoItem);
                     coverageTreeView.Items.Add(helpItem);
+                    coverageTreeView.Items.Add(menuItem);
 
                     // Disable highlighting
                     adornmentManager.DeactivateCoverage();

@@ -2,7 +2,8 @@ using Microsoft.VisualStudio.Shell;
 using System;
 using System.Runtime.InteropServices;
 using System.Threading;
-using Task = System.Threading.Tasks.Task;
+using System.Threading.Tasks;
+using System.ComponentModel;
 using System.ComponentModel.Design;
 using Microsoft.VisualStudio.Shell.Interop;
 using SimpleCoverage.CoverageAdornment;
@@ -56,20 +57,11 @@ namespace SimpleCoverage
             // Initialize the adornment manager
             adornmentManager = new CoverageAdornmentManager();
 
-            // Add service provider
-            await this.AddServiceAsync(typeof(CoverageAdornmentManager), CreateAdornmentManagerServiceAsync, true);
+            // Register the adornment manager as a service
+            ((IServiceContainer)this).AddService(typeof(CoverageAdornmentManager), adornmentManager, true);
 
             // Register the menu commands
             await RegisterCommandsAsync();
-        }
-
-        /// <summary>
-        /// Creates the adornment manager service
-        /// </summary>
-        private async Task<object> CreateAdornmentManagerServiceAsync(IAsyncServiceContainer container, CancellationToken cancellationToken, Type serviceType)
-        {
-            await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
-            return adornmentManager;
         }
 
         /// <summary>

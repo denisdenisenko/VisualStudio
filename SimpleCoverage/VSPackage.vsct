@@ -3,9 +3,7 @@
 
   <Extern href="stdidcmd.h"/>
   <Extern href="vsshlids.h"/>
-  <Extern href="vsshlids.h"/>
   <Extern href="VsDbgCmd.h" />
-  <Extern href="stdidcmd.h" />
 
   <Commands package="guidSimpleCoveragePackage">
     <Groups>
@@ -13,31 +11,28 @@
         <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS"/>
       </Group>
       <Group guid="guidSimpleCoveragePackageCmdSet" id="MyOtherWindowsGroup" priority="0x0100">
-        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_VIEW_OTHER_WINDOWS"/>
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_WINDOW"/>
       </Group>
       <Group guid="guidSimpleCoveragePackageCmdSet" id="MyTestMenuGroup" priority="0x0100">
-        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TEST"/>
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS"/>
       </Group>
     </Groups>
 
     <Buttons>
       <Button guid="guidSimpleCoveragePackageCmdSet" id="cmdidShowMSTestCoverageToolWindow" priority="0x0100" type="Button">
         <Parent guid="guidSimpleCoveragePackageCmdSet" id="MyMenuGroup" />
-        <Icon guid="guidVsShellIcons" id="CheckboxChecked" />
         <Strings>
           <ButtonText>Code Coverage (MSTest)</ButtonText>
         </Strings>
       </Button>
       <Button guid="guidSimpleCoveragePackageCmdSet" id="cmdidShowMSTestCoverageOtherWindow" priority="0x0100" type="Button">
         <Parent guid="guidSimpleCoveragePackageCmdSet" id="MyOtherWindowsGroup" />
-        <Icon guid="guidVsShellIcons" id="CheckboxChecked" />
         <Strings>
           <ButtonText>Code Coverage (MSTest)</ButtonText>
         </Strings>
       </Button>
       <Button guid="guidSimpleCoveragePackageCmdSet" id="cmdidShowMSTestCoverageTestMenu" priority="0x0100" type="Button">
         <Parent guid="guidSimpleCoveragePackageCmdSet" id="MyTestMenuGroup" />
-        <Icon guid="guidVsShellIcons" id="CheckboxChecked" />
         <Strings>
           <ButtonText>Show Code Coverage (MSTest)</ButtonText>
         </Strings>
